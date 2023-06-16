@@ -1,4 +1,5 @@
 import Table from "./components/Table.js";
+import Pagination from "./components/Pagination.js";
 
 const App = () => {
   const render = async () => {
@@ -11,7 +12,8 @@ const App = () => {
       const response = await fetch("src/data.json");
       if (response.ok) {
         let data = await response.json();
-        const table = Table(data);
+        Table(data);
+        Pagination(data);
       } else {
         console.log(response);
       }
