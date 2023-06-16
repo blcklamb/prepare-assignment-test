@@ -1,27 +1,22 @@
 body {
-  padding: 50px 50px;
   background-color: #ebebeb;
+  padding: 50px 50px;
 }
 
 #page_title {
   margin: 20px 0;
-  font-size: 2rem;
   font-weight: bold;
+  font-size: 2rem;
 }
 
 table {
   border: 2px transparent;
-  width: 100%;
   background-color: #ebebeb;
+  width: 100%;
 }
 
 th {
   background-color: #c0c0c0;
-}
-
-th,
-td {
-  /* border: 1px solid #22223b; */
   padding: 8px;
 }
 
@@ -29,7 +24,7 @@ tr {
   text-align: center;
 }
 
-tr.odd {
+tr:nth-child(even) {
   background-color: #c0c0c0;
 }
 
@@ -48,18 +43,18 @@ tr.odd {
 }
 
 #pagination {
+  background-color: #ebebeb;
   padding: 10px 10px;
   text-align: center;
-  background-color: #ebebeb;
 }
 
 #pagination > button {
+  cursor: pointer;
   margin: 0 10px;
-  font-size: 1rem;
-  font-weight: 550;
   border: 0;
   background-color: #ebebeb;
-  cursor: pointer;
+  font-weight: 550;
+  font-size: 1rem;
 }
 
 #pagination > button.active {

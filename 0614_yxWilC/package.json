@@ -18,5 +18,8 @@
   "homepage": "https://github.com/blcklamb/prepare-assignment-test#readme",
   "dependencies": {
     "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "prettier-plugin-css-order": "^1.3.1"
   }
 }
