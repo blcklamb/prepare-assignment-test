@@ -1,102 +1,92 @@
 "use client";
 
-import Image from "next/image";
-import styles from "./page.module.css";
 import styled from "styled-components";
 
 export default function Home() {
+  const settingType = [
+    "결제수단 레이아웃",
+    "카드사 레이아웃",
+    "기본 설정",
+    "배지 스타일",
+  ];
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <TempSC>hihi</TempSC>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Wrapper>
+      <LeftAside>
+        <SettingTypeButtonList>
+          {settingType.map((ele, key) => {
+            return <SettingTypeButton key={key}>{ele}</SettingTypeButton>;
+          })}
+        </SettingTypeButtonList>
+        <DesignResetButtonList>
+          <DesignResetButton></DesignResetButton>
+        </DesignResetButtonList>
+      </LeftAside>
+      <Main></Main>
+      <RightAside></RightAside>
+    </Wrapper>
   );
 }
 
-const TempSC = styled.div``;
+const Wrapper = styled.div`
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+`;
+
+const LeftAside = styled.aside`
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 200px;
+  height: calc(100vh);
+  border-right: 1px solid rgba(0, 29, 58, 0.18);
+  overflow: auto;
+  padding-top: 8px;
+  background: "white";
+`;
+
+const RightAside = styled.aside`
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  width: 256px;
+  height: calc(100vh);
+  border-left: 1px solid rgba(0, 29, 58, 0.18);
+  overflow: auto;
+`;
+
+const Main = styled.main`
+  width: calc((100vw - 456px) - 56px);
+  height: calc(100vh);
+`;
+
+const SettingTypeButtonList = styled.div``;
+
+const SettingTypeButton = styled.button`
+  color: "#4e5968";
+  border-radius: 8px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  margin: 0;
+  overflow: visible;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+`;
+
+const DesignResetButtonList = styled.div``;
+
+const DesignResetButton = styled.button``;
