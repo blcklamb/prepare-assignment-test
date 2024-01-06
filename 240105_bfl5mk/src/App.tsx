@@ -1,23 +1,26 @@
-import { useState } from "react";
+import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 import "./App.css";
+import Group from "./group/Group";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Canvas
+        camera={{
+          fov: 75,
+          near: 1,
+          far: 100,
+          position: [5, 5, 5],
+        }}
+      >
+        <color attach="background" args={["white"]} />
+        <OrbitControls />
+        <axesHelper args={[6]} />
+        <gridHelper args={[10, 10]} />
+        <directionalLight position={[5, 5, 5]} />
+        <Group />
+      </Canvas>
     </>
   );
 }
