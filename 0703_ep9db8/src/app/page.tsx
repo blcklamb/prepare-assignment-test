@@ -18,7 +18,7 @@ export default function Home() {
           })}
         </SettingTypeButtonList>
         <DesignResetButtonList>
-          <DesignResetButton></DesignResetButton>
+          <DesignResetButton>디자인 설정 초기화</DesignResetButton>
         </DesignResetButtonList>
       </LeftAside>
       <Main></Main>
@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   -webkit-box-pack: start;
   justify-content: flex-start;
+  height: calc(100vh);
 `;
 
 const LeftAside = styled.aside`
@@ -68,7 +69,15 @@ const Main = styled.main`
   height: calc(100vh);
 `;
 
-const SettingTypeButtonList = styled.div``;
+const SettingTypeButtonList = styled.div`
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  margin: 8px;
+`;
 
 const SettingTypeButton = styled.button`
   color: "#4e5968";
@@ -87,6 +96,39 @@ const SettingTypeButton = styled.button`
   transition: background-color 0.2s ease;
 `;
 
-const DesignResetButtonList = styled.div``;
+const DesignResetButtonList = styled.div`
+  -webkit-box-align: stretch;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  margin: 8px;
+`;
 
-const DesignResetButton = styled.button``;
+const DesignResetButton = styled.button`
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 18px;
+  color: #4e5968;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f2f4f6;
+  background-image: none;
+  border: 0 solid transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  transition: background 0.2s ease, color 0.1s ease;
+  text-decoration: none;
+  border-radius: 7px;
+  padding: 7px 12px;
+`;

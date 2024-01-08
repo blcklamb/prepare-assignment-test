@@ -1,18 +1,32 @@
 import * as THREE from "three";
-import { useLoader, useThree } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
-import { useEffect, useState } from "react";
+import { useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+
+import { useRef, useState } from "react";
 import { useSpring, animated, config } from "@react-spring/three";
 import { EmojiModelProps } from "../types/Emoji";
 import { convertNameToPath } from "../utils/emojiModel";
+import { useTexture } from "@react-three/drei";
 
 const Emoji = ({ position, src }: EmojiModelProps) => {
+  const groupRef = useRef<THREE.Group>(null);
   const { x, y, z } = position;
 
-  const gltf = useLoader(GLTFLoader, convertNameToPath(src));
+  const {
+    nodes,
+    scene,
+  }: { nodes: { [name: string]: THREE.Mesh }; scene: THREE.Scene } = useLoader(
+    GLTFLoader,
+    convertNameToPath(src)
+  );
+  const matcap = useTexture(`./images/matcap4.jpeg`);
 
-  const { raycaster } = useThree();
-  const intersects = raycaster.intersectObjects(gltf.scene.children);
+  Object.values(nodes).forEach((node) => {
+    if (node instanceof THREE.Mesh) {
+      node.material = new THREE.MeshMatcapMaterial({ matcap: matcap });
+    }
+  });
+  scene.overrideMaterial = new THREE.MeshMatcapMaterial({ matcap: matcap });
 
   const [isHovered, setIsHovered] = useState(false);
   const { scale } = useSpring({
@@ -20,21 +34,14 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
     config: config.wobbly,
   });
 
-  useEffect(() => {
-    if (intersects.length > 0) {
-      const obj = intersects[0].object as THREE.Mesh;
-      const material = obj.material as THREE.MeshStandardMaterialParameters;
-      material.color = new THREE.Color("#C7A44B");
-    }
-  }, [intersects]);
-
   return (
     <group
+      ref={groupRef}
       onPointerOver={() => setIsHovered(true)}
       onPointerOut={() => setIsHovered(false)}
     >
       <animated.group scale={scale} position={[x, y, z]}>
-        <primitive object={gltf.scene} />
+        <primitive object={scene} />
       </animated.group>
     </group>
   );
