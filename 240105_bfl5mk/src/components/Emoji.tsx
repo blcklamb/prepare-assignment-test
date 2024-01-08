@@ -10,7 +10,8 @@ import { useTexture } from "@react-three/drei";
 
 const Emoji = ({ position, src }: EmojiModelProps) => {
   const groupRef = useRef<THREE.Group>(null);
-  const { x, y, z } = position;
+
+  const [x, y, z] = position;
 
   const {
     nodes,

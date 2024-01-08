@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import Emoji from "../components/Emoji";
-import { getRandomNumberInRange } from "../utils/random";
+// import { getRandomNumberInRange } from "../utils/random";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 
@@ -27,16 +27,32 @@ const Group = () => {
     "ghost",
   ];
 
+  const initialPositions = useMemo(() => {
+    const randomPositions = new Array(EMOJI_NAME.length * 3);
+
+    for (let i = 0; i < EMOJI_NAME.length * 3; i++) {
+      randomPositions[i] = (Math.random() - 0.5) * 10;
+    }
+    return randomPositions;
+  }, [EMOJI_NAME.length]);
+
+  const [positions, setPositions] = useState<number[]>(initialPositions);
+
+  useEffect(() => {
+    if (!disableAutoRotate) {
+      setPositions(initialPositions);
+    }
+  }, [disableAutoRotate, initialPositions]);
+
   useEffect(() => {
     cameraRef.current?.setTarget(0, 0, 0, true);
-  });
+  }, []);
 
   useFrame((_, delta) => {
     if (cameraRef.current && !disableAutoRotate) {
-      cameraRef.current.azimuthAngle += THREE.MathUtils.degToRad(20 * delta);
+      cameraRef.current.azimuthAngle -= THREE.MathUtils.degToRad(5 * delta);
     }
   });
-
   return (
     <group ref={groupRef}>
       <CameraControls
@@ -45,22 +61,16 @@ const Group = () => {
         dollyToCursor={false}
         onStart={() => {
           setDisableAutoRotate(true);
-          console.log("start");
         }}
         onEnd={() => {
           setDisableAutoRotate(false);
-          console.log("end");
         }}
       />
-      {EMOJI_NAME.map((ele) => {
+      {EMOJI_NAME.map((ele, idx) => {
         return (
           <Emoji
             key={ele}
-            position={{
-              x: getRandomNumberInRange(-5, 5),
-              y: getRandomNumberInRange(-5, 5),
-              z: getRandomNumberInRange(-5, 5),
-            }}
+            position={positions.slice(idx * 3, idx * 3 + 3)}
             src={ele}
           />
         );

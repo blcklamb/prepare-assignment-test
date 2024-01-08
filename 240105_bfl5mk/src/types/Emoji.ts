@@ -1,4 +1,4 @@
 export interface EmojiModelProps {
-  position: { x: number; y: number; z: number };
+  position: number[];
   src: string;
 }
