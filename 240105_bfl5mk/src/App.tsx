@@ -9,10 +9,8 @@ function App() {
       <Canvas>
         <color attach="background" args={["black"]} />
         <OrbitControls />
-        <axesHelper args={[6]} />
-        <gridHelper args={[10, 10]} />
-        {/* <directionalLight position={[10000, 10000, 10000]} intensity={10} /> */}
-
+        {/* <axesHelper args={[6]} /> */}
+        {/* <gridHelper args={[10, 10]} /> */}
         <Group />
       </Canvas>
     </>
