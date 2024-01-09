@@ -1,8 +1,7 @@
 import * as THREE from "three";
-import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSpring, animated, config } from "@react-spring/three";
 import { EmojiModelProps } from "../types/Emoji";
 import { convertNameToPath } from "../utils/emojiModel";
@@ -13,21 +12,21 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
 
   const [x, y, z] = position;
 
-  const {
-    nodes,
-    scene,
-  }: { nodes: { [name: string]: THREE.Mesh }; scene: THREE.Scene } = useLoader(
-    GLTFLoader,
-    convertNameToPath(src)
-  );
+  const loader = useMemo(() => new GLTFLoader(), []);
+  const [scene, setScene] = useState<THREE.Group | THREE.Scene | null>(null);
+
   const matcap = useTexture(`./images/matcap4.jpeg`);
 
-  Object.values(nodes).forEach((node) => {
-    if (node instanceof THREE.Mesh) {
-      node.material = new THREE.MeshMatcapMaterial({ matcap: matcap });
-    }
-  });
-  scene.overrideMaterial = new THREE.MeshMatcapMaterial({ matcap: matcap });
+  useEffect(() => {
+    loader.load(convertNameToPath(src), (gltf) => {
+      gltf.scene.traverse((node) => {
+        if (node instanceof THREE.Mesh) {
+          node.material = new THREE.MeshMatcapMaterial({ matcap: matcap });
+        }
+      });
+      setScene(gltf.scene);
+    });
+  }, [loader, src, matcap]);
 
   const [isHovered, setIsHovered] = useState(false);
   const { scale } = useSpring({
@@ -39,7 +38,9 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
     if (animatedGroupRef.current) {
       animatedGroupRef.current.lookAt(x * 2, y * 2, z * 2);
     }
-  });
+  }, [x, y, z, src]);
+
+  if (!scene) return null;
 
   return (
     <group

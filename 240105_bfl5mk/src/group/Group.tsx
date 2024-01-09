@@ -54,6 +54,7 @@ const Group = () => {
       cameraRef.current.azimuthAngle -= THREE.MathUtils.degToRad(5 * delta);
     }
   });
+
   return (
     <group ref={groupRef}>
       <CameraControls
@@ -70,7 +71,7 @@ const Group = () => {
       {EMOJI_ARRAY.map((ele, idx) => {
         return (
           <Emoji
-            key={idx}
+            key={ele + idx}
             position={positions.slice(idx * 3, idx * 3 + 3)}
             src={ele}
           />
