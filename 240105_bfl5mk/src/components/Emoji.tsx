@@ -6,6 +6,7 @@ import { useSpring, animated, config } from "@react-spring/three";
 import { EmojiModelProps } from "../types/Emoji";
 import { convertNameToPath } from "../utils/emojiModel";
 import { useTexture } from "@react-three/drei";
+import { getRandomIntegerInRange } from "../utils/random";
 
 const Emoji = ({ position, src }: EmojiModelProps) => {
   const animatedGroupRef = useRef<THREE.Group>(null);
@@ -15,7 +16,8 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
   const loader = useMemo(() => new GLTFLoader(), []);
   const [scene, setScene] = useState<THREE.Group | THREE.Scene | null>(null);
 
-  const matcap = useTexture(`./images/matcap4.jpeg`);
+  const textureNum = useMemo(() => getRandomIntegerInRange(1, 5), []);
+  const matcap = useTexture(`./images/matcap${textureNum}.jpeg`);
 
   useEffect(() => {
     loader.load(convertNameToPath(src), (gltf) => {
