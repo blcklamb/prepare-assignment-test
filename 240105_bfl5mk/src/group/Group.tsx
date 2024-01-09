@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import Emoji from "../components/Emoji";
-// import { getRandomNumberInRange } from "../utils/random";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
 
@@ -27,14 +26,16 @@ const Group = () => {
     "ghost",
   ];
 
-  const initialPositions = useMemo(() => {
-    const randomPositions = new Array(EMOJI_NAME.length * 3);
+  const EMOJI_ARRAY = [...EMOJI_NAME, ...EMOJI_NAME, ...EMOJI_NAME];
 
-    for (let i = 0; i < EMOJI_NAME.length * 3; i++) {
+  const initialPositions = useMemo(() => {
+    const randomPositions = new Array(EMOJI_ARRAY.length * 3);
+
+    for (let i = 0; i < EMOJI_ARRAY.length * 3; i++) {
       randomPositions[i] = (Math.random() - 0.5) * 10;
     }
     return randomPositions;
-  }, [EMOJI_NAME.length]);
+  }, [EMOJI_ARRAY.length]);
 
   const [positions, setPositions] = useState<number[]>(initialPositions);
 
@@ -66,10 +67,10 @@ const Group = () => {
           setDisableAutoRotate(false);
         }}
       />
-      {EMOJI_NAME.map((ele, idx) => {
+      {EMOJI_ARRAY.map((ele, idx) => {
         return (
           <Emoji
-            key={ele}
+            key={idx}
             position={positions.slice(idx * 3, idx * 3 + 3)}
             src={ele}
           />

@@ -2,14 +2,14 @@ import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSpring, animated, config } from "@react-spring/three";
 import { EmojiModelProps } from "../types/Emoji";
 import { convertNameToPath } from "../utils/emojiModel";
 import { useTexture } from "@react-three/drei";
 
 const Emoji = ({ position, src }: EmojiModelProps) => {
-  const groupRef = useRef<THREE.Group>(null);
+  const animatedGroupRef = useRef<THREE.Group>(null);
 
   const [x, y, z] = position;
 
@@ -35,13 +35,18 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
     config: config.wobbly,
   });
 
+  useEffect(() => {
+    if (animatedGroupRef.current) {
+      animatedGroupRef.current.lookAt(x * 2, y * 2, z * 2);
+    }
+  });
+
   return (
     <group
-      ref={groupRef}
       onPointerOver={() => setIsHovered(true)}
       onPointerOut={() => setIsHovered(false)}
     >
-      <animated.group scale={scale} position={[x, y, z]}>
+      <animated.group ref={animatedGroupRef} scale={scale} position={[x, y, z]}>
         <primitive object={scene} />
       </animated.group>
     </group>
