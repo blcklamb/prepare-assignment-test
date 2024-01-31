@@ -3,8 +3,10 @@ import * as THREE from "three";
 import Emoji from "../components/Emoji";
 import { useFrame } from "@react-three/fiber";
 import { CameraControls } from "@react-three/drei";
+import { EmojiModelProps } from "../types/Emoji";
+import { getRandomNumberInRange } from "../utils/random";
 
-const EMOJI_NAME = [
+const EMOJI_NAME: EmojiModelProps["src"][] = [
   "heartEyes",
   "wink",
   "happy",
@@ -29,7 +31,7 @@ const Group = () => {
   const [disableAutoRotate, setDisableAutoRotate] = useState<boolean>(false);
 
   const EMOJI_ARRAY = useMemo(() => {
-    const emojis = [];
+    const emojis: EmojiModelProps["src"][] = [];
     for (let i = 0; i < COUNT; i++) {
       emojis.push(EMOJI_NAME[i % EMOJI_NAME.length]);
     }
@@ -39,7 +41,7 @@ const Group = () => {
   const initialPositions = useMemo(() => {
     const randomPositions = new Array(COUNT * 3);
     for (let i = 0; i < COUNT * 3; i++) {
-      randomPositions[i] = (Math.random() - 0.5) * 10;
+      randomPositions[i] = getRandomNumberInRange(-5, 5);
     }
     return randomPositions;
   }, []);
@@ -62,33 +64,25 @@ const Group = () => {
     }
   });
 
-  const emojiArray = useMemo(() => {
-    return EMOJI_ARRAY.map((ele, idx) => {
-      return (
-        <Emoji
-          key={ele + idx}
-          position={positions.slice(idx * 3, idx * 3 + 3)}
-          src={ele}
-        />
-      );
-    });
-  }, [EMOJI_ARRAY, positions]);
-
   return (
     <group ref={groupRef}>
       <CameraControls
         maxDistance={10}
         ref={cameraRef}
         enabled={true}
-        dollyToCursor={false}
-        onStart={() => {
-          setDisableAutoRotate(true);
-        }}
-        onEnd={() => {
-          setDisableAutoRotate(false);
-        }}
+        dollySpeed={1}
+        onStart={() => setDisableAutoRotate(true)}
+        onEnd={() => setDisableAutoRotate(false)}
       />
-      {emojiArray}
+      {EMOJI_ARRAY.map((ele, idx) => {
+        return (
+          <Emoji
+            key={ele + idx}
+            position={positions.slice(idx * 3, idx * 3 + 3)}
+            src={ele}
+          />
+        );
+      })}
     </group>
   );
 };
