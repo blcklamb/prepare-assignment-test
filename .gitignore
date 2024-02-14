@@ -128,3 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# custom, temperary
+0614_zgf5px/
+0923_jr06dm/
+0703_ep9db8/
+
+.DS_Store
