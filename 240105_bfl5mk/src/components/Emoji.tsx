@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { animated } from "@react-spring/three";
 import { EmojiModelProps } from "../types/Emoji";
 import { convertNameToPath } from "../utils/emojiModel";
@@ -13,23 +13,24 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
   const [x, y, z] = position;
   const animatedGroupRef = useRef<THREE.Group>(null);
 
+  const frameIdRef = useRef<number>();
+
+  const updateLookAt = useCallback(() => {
+    if (animatedGroupRef.current) {
+      animatedGroupRef.current.lookAt(x * 2, y * 2, z * 2);
+    } else {
+      frameIdRef.current = requestAnimationFrame(updateLookAt);
+    }
+  }, [animatedGroupRef, x, y, z]);
+
   useEffect(() => {
     let frameId: number;
-
-    const updateLookAt = () => {
-      if (animatedGroupRef.current) {
-        animatedGroupRef.current.lookAt(x * 2, y * 2, z * 2);
-      } else {
-        frameId = requestAnimationFrame(updateLookAt);
-      }
-    };
-
     updateLookAt();
 
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [x, y, z, src]);
+  }, [updateLookAt]);
 
   // model loader, render
   const loader = useMemo(() => new GLTFLoader(), []);
@@ -38,10 +39,11 @@ const Emoji = ({ position, src }: EmojiModelProps) => {
   const matcap = useTexture(`./images/matcap${textureNum}.jpeg`);
 
   useEffect(() => {
+    const material = new THREE.MeshMatcapMaterial({ matcap: matcap });
     loader.load(convertNameToPath(src), (gltf) => {
       gltf.scene.traverse((node) => {
         if (node instanceof THREE.Mesh) {
-          node.material = new THREE.MeshMatcapMaterial({ matcap: matcap });
+          node.material = material;
         }
       });
       setScene(gltf.scene);
