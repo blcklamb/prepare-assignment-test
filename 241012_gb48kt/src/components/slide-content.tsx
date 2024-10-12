@@ -11,7 +11,7 @@ export default function SlideContent({ src, index }: SlideContentProps) {
       <img
         src={src}
         alt={`carousel image - ${index}`}
-        className="rounded-[8px] !object-cover"
+        className="rounded-[8px] object-cover w-80 h-auto"
       />
     </div>
   );

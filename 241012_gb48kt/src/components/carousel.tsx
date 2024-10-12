@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NavigationButton } from "./navigate-button";
+import Slide from "./slide";
 
 const DEFAULT_GO_TO_SLIDE_DELAY = 100;
 
@@ -112,9 +113,19 @@ export default function Carousel({
   return (
     <div className="relative flex h-full flex-col">
       <div className="h-full w-full">
-        {slides.map((slide: CarouselProps["slides"][number]) => (
-          <>{slide.content}</>
-        ))}
+        {slides.map(
+          (
+            slide: CarouselProps["slides"][number],
+            presentableIndex: number
+          ) => (
+            <Slide
+              {...slide}
+              key={slide.key}
+              index={presentableIndex}
+              offsetRadius={6}
+            />
+          )
+        )}
       </div>
       <div className="max-pc:hidden absolute flex h-full w-full items-center justify-between">
         <NavigationButton
