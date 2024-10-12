@@ -3,6 +3,7 @@ import { NavigationButton } from "./navigate-button";
 import Slide from "./slide";
 
 const DEFAULT_GO_TO_SLIDE_DELAY = 100;
+const DEFAULT_OFFSET_RADIUS = 2;
 
 interface CarouselProps {
   currentTargetSlideIndex: number;
@@ -32,6 +33,31 @@ export default function Carousel({
   });
 
   const goToIn = useRef<number>();
+
+  const moveSlide = (direction: -1 | 1) => {
+    setCarouselMovement((prev) => {
+      return {
+        ...prev,
+        index: modBySlidesLength(prev.index + direction),
+        targetSlideIndex: null,
+      };
+    });
+  };
+
+  const clampOffsetRadius = (currentOffsetRadius: number): number => {
+    const upperBound = Math.floor((slides.length - 1) / 2);
+
+    if (currentOffsetRadius < 0) {
+      return 0;
+    }
+    if (currentOffsetRadius > upperBound) {
+      return upperBound;
+    }
+
+    return currentOffsetRadius;
+  };
+
+  const clampedOffsetRadius = clampOffsetRadius(DEFAULT_OFFSET_RADIUS);
 
   const modBySlidesLength = (index: number): number => {
     return mod(index, slides.length);
@@ -80,6 +106,18 @@ export default function Carousel({
     }
   };
 
+  const getPresentableSlides = (): CarouselProps["slides"] => {
+    const { index } = carouselMovement;
+    const presentableSlides: CarouselProps["slides"] = [];
+
+    for (let i = -clampedOffsetRadius; i < 1 + clampedOffsetRadius; i++) {
+      const slidedSlide = slides[modBySlidesLength(index + i)]!;
+      presentableSlides.push(slidedSlide);
+    }
+
+    return presentableSlides;
+  };
+
   useEffect(() => {
     const { index, targetSlideIndex, prevPropsTargetSlideIndex, newSlide } =
       carouselMovement;
@@ -113,7 +151,7 @@ export default function Carousel({
   return (
     <div className="relative flex h-full flex-col">
       <div className="h-full w-full">
-        {slides.map(
+        {getPresentableSlides().map(
           (
             slide: CarouselProps["slides"][number],
             presentableIndex: number
@@ -122,20 +160,14 @@ export default function Carousel({
               {...slide}
               key={slide.key}
               index={presentableIndex}
-              offsetRadius={6}
+              offsetRadius={clampedOffsetRadius}
             />
           )
         )}
       </div>
-      <div className="max-pc:hidden absolute flex h-full w-full items-center justify-between">
-        <NavigationButton
-          type="prev"
-          onClick={() => console.log("prev clicked")}
-        />
-        <NavigationButton
-          type="next"
-          onClick={() => console.log("next clicked")}
-        />
+      <div className="z-10 max-pc:hidden absolute flex h-full w-full items-center justify-between">
+        <NavigationButton type="prev" onClick={() => moveSlide(-1)} />
+        <NavigationButton type="next" onClick={() => moveSlide(1)} />
       </div>
     </div>
   );
