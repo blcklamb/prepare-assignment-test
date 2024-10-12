@@ -165,7 +165,7 @@ export default function Carousel({
           )
         )}
       </div>
-      <div className="z-10 max-pc:hidden absolute flex h-full w-full items-center justify-between">
+      <div className="max-pc:hidden absolute flex h-full w-full items-center justify-between">
         <NavigationButton type="prev" onClick={() => moveSlide(-1)} />
         <NavigationButton type="next" onClick={() => moveSlide(1)} />
       </div>
