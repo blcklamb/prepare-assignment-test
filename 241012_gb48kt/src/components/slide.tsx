@@ -4,7 +4,7 @@ import { animated, config, easings, useSpring } from "react-spring";
 const DEFAULT_ANIMATION_CONFIG = config.gentle;
 interface SlideProps {
   content: JSX.Element;
-  onClick?: () => void;
+  onClick: () => void;
   offsetRadius: number;
   index: number;
 }
@@ -12,7 +12,7 @@ interface SlideProps {
 function getDefaultTranslateX(offsetFromCenter: number): number {
   // Define how much we want to shift per step, dynamically based on offsetRadius
   const leftStep = 30; // Step for negative (left side) values, i.e., -30 per step
-  const rightStep = 0.3; // Step for positive (right side) values, i.e., 0.3 per step
+  const rightStep = -2; // Step for positive (right side) values, i.e., 0.3 per step
 
   // Centered case
   if (offsetFromCenter === 0) return 0;
@@ -66,7 +66,7 @@ export default function Slide({
       config: DEFAULT_ANIMATION_CONFIG,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offsetRadius, offsetFromCenter, distanceFactor]);
+  }, [offsetFromCenter, distanceFactor]);
 
   return (
     <animated.div
